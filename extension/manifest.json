@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Purchase Policy Optimizer",
+  "version": "1.0.0",
+  "description": "Tracks domain counters and optimizes purchase policies on 2nd-3rd visits.",
+  "permissions": [
+    "tabs",
+    "storage"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ]
+}
