@@ -1,0 +1,133 @@
+{
+  "U001": {
+    "uid": "U001",
+    "name": "Ananya Rao",
+    "financial_profile": {
+      "current_savings_balance": 4200000,
+      "estimated_monthly_net_income": 210000,
+      "current_cibil_score": 812
+    },
+    "purchasing_history": [
+      {"year": 2022, "type": "Home Loan", "monthly_emi": 32000, "status": "active", "delinquent_count": 0},
+      {"year": 2021, "type": "Car Loan", "monthly_emi": 0, "status": "closed", "delinquent_count": 0}
+    ]
+  },
+  "U002": {
+    "uid": "U002",
+    "name": "Rohan Kapoor",
+    "financial_profile": {
+      "current_savings_balance": 2850000,
+      "estimated_monthly_net_income": 165000,
+      "current_cibil_score": 795
+    },
+    "purchasing_history": [
+      {"year": 2023, "type": "Personal Loan", "monthly_emi": 12000, "status": "active", "delinquent_count": 0},
+      {"year": 2020, "type": "Credit Card", "monthly_emi": 0, "status": "closed", "delinquent_count": 0}
+    ]
+  },
+  "U003": {
+    "uid": "U003",
+    "name": "Meera Iyer",
+    "financial_profile": {
+      "current_savings_balance": 950000,
+      "estimated_monthly_net_income": 95000,
+      "current_cibil_score": 742
+    },
+    "purchasing_history": [
+      {"year": 2024, "type": "Car Loan", "monthly_emi": 18000, "status": "active", "delinquent_count": 0},
+      {"year": 2022, "type": "Personal Loan", "monthly_emi": 0, "status": "closed", "delinquent_count": 1}
+    ]
+  },
+  "U004": {
+    "uid": "U004",
+    "name": "Arjun Mehta",
+    "financial_profile": {
+      "current_savings_balance": 3500000,
+      "estimated_monthly_net_income": 35000,
+      "current_cibil_score": 718
+    },
+    "purchasing_history": [
+      {"year": 2025, "type": "Personal Loan", "monthly_emi": 45000, "status": "active", "delinquent_count": 0}
+    ]
+  },
+  "U005": {
+    "uid": "U005",
+    "name": "Priya Nair",
+    "financial_profile": {
+      "current_savings_balance": 410000,
+      "estimated_monthly_net_income": 68000,
+      "current_cibil_score": 705
+    },
+    "purchasing_history": [
+      {"year": 2023, "type": "Credit Card", "monthly_emi": 8000, "status": "active", "delinquent_count": 2},
+      {"year": 2021, "type": "Personal Loan", "monthly_emi": 0, "status": "closed", "delinquent_count": 0}
+    ]
+  },
+  "U006": {
+    "uid": "U006",
+    "name": "Vikram Singh",
+    "financial_profile": {
+      "current_savings_balance": 180000,
+      "estimated_monthly_net_income": 52000,
+      "current_cibil_score": 681
+    },
+    "purchasing_history": [
+      {"year": 2024, "type": "Personal Loan", "monthly_emi": 15000, "status": "active", "delinquent_count": 1},
+      {"year": 2022, "type": "Credit Card", "monthly_emi": 5000, "status": "active", "delinquent_count": 3}
+    ]
+  },
+  "U007": {
+    "uid": "U007",
+    "name": "Sneha Desai",
+    "financial_profile": {
+      "current_savings_balance": 95000,
+      "estimated_monthly_net_income": 41000,
+      "current_cibil_score": 640
+    },
+    "purchasing_history": [
+      {"year": 2023, "type": "Personal Loan", "monthly_emi": 14000, "status": "active", "delinquent_count": 4},
+      {"year": 2021, "type": "Credit Card", "monthly_emi": 3000, "status": "delinquent", "delinquent_count": 2}
+    ]
+  },
+  "U008": {
+    "uid": "U008",
+    "name": "Karan Bhatt",
+    "financial_profile": {
+      "current_savings_balance": 42000,
+      "estimated_monthly_net_income": 38000,
+      "current_cibil_score": 598
+    },
+    "purchasing_history": [
+      {"year": 2022, "type": "Personal Loan", "monthly_emi": 11000, "status": "delinquent", "delinquent_count": 6},
+      {"year": 2020, "type": "Credit Card", "monthly_emi": 2500, "status": "delinquent", "delinquent_count": 5}
+    ]
+  },
+  "U009": {
+    "uid": "U009",
+    "name": "Farah Khan",
+    "financial_profile": {
+      "current_savings_balance": 15000,
+      "estimated_monthly_net_income": 29000,
+      "current_cibil_score": 552
+    },
+    "purchasing_history": [
+      {"year": 2023, "type": "Personal Loan", "monthly_emi": 9000, "status": "defaulted", "delinquent_count": 8},
+      {"year": 2021, "type": "Credit Card", "monthly_emi": 0, "status": "written_off", "delinquent_count": 7},
+      {"year": 2019, "type": "Two-Wheeler Loan", "monthly_emi": 0, "status": "closed", "delinquent_count": 3}
+    ]
+  },
+  "U010": {
+    "uid": "U010",
+    "name": "Deepak Yadav",
+    "financial_profile": {
+      "current_savings_balance": 3000,
+      "estimated_monthly_net_income": 22000,
+      "current_cibil_score": 489
+    },
+    "purchasing_history": [
+      {"year": 2024, "type": "Personal Loan", "monthly_emi": 7000, "status": "defaulted", "delinquent_count": 11},
+      {"year": 2022, "type": "Credit Card", "monthly_emi": 4000, "status": "written_off", "delinquent_count": 9},
+      {"year": 2020, "type": "Personal Loan", "monthly_emi": 0, "status": "written_off", "delinquent_count": 6}
+    ]
+  }
+}

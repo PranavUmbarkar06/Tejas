@@ -1,43 +1,53 @@
-// Initialize or update tracking data on tab navigation
+const TARGET_DOMAINS = ["tesla.com", "autotrader.com", "godaddy.com", "carvana.com"];
+const VISIT_THRESHOLD = 2; // Prompt triggers when visits > 2 (i.e., on the 3rd visit)
+const LOAN_URL = "https://somebank.com/loans_agent";
+
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  if (changeInfo.status === 'complete' && tab.url && tab.url.startsWith('http')) {
+  // Catching 'complete' status ensures we only count full page loads, not background resource adjustments
+  if (changeInfo.status === 'complete' && tab.url) {
     try {
       const url = new URL(tab.url);
-      const domain = url.hostname;
+      const domain = url.hostname.replace('www.', '');
 
-      chrome.storage.local.get(['visited_domains'], (result) => {
-        const data = result.visited_domains || {};
-        data[domain] = (data[domain] || 0) + 1;
-
-        chrome.storage.local.set({ visited_domains: data }, () => {
-          console.log(`Updated tracker for ${domain}: ${data[domain]} visits`);
-        });
-      });
+      if (TARGET_DOMAINS.includes(domain)) {
+        handleVisit(domain, tabId);
+      }
     } catch (e) {
-      console.error("Error parsing URL: ", e);
+      // Safely catch and discard malformed URLs or internal chrome:// lines
     }
   }
 });
 
-// Listen for buy intent signals from the content script
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.action === 'detect_buy_intent' && sender.tab) {
-    const domain = new URL(sender.tab.url).hostname;
+function handleVisit(domain, tabId) {
+  chrome.storage.local.get([domain], (result) => {
+    let visits = result[domain] || 0;
+    visits++;
 
-    chrome.storage.local.get(['visited_domains'], (result) => {
-      const data = result.visited_domains || {};
-      const currentVisits = data[domain] || 1;
+    if (visits > VISIT_THRESHOLD) {
+      // Reset immediately before prompting to prevent race conditions or double-triggering on fast clicks
+      chrome.storage.local.set({ [domain]: 0 }, () => {
+        triggerPromptAndRedirect(tabId);
+      });
+    } else {
+      chrome.storage.local.set({ [domain]: visits });
+      console.log(`${domain} visit count incremented to: ${visits}`);
+    }
+  });
+}
 
-      // Policy Rule: Intervene if user is trying to buy on the 2nd or 3rd visit
-      if (currentVisits >= 2 && currentVisits <= 3) {
-        console.log(`Policy Triggered for ${domain} on visit #${currentVisits}`);
-        
-        // Notify the content script to execute the balance check and policy prompt
-        chrome.tabs.sendMessage(sender.tab.id, { 
-          action: 'prompt_policy_check', 
-          visitCount: currentVisits 
-        });
-      }
-    });
-  }
-});
+function triggerPromptAndRedirect(tabId) {
+  chrome.scripting.executeScript({
+    target: { tabId: tabId },
+    func: () => {
+      // This displays the native browser modal directly over the current website
+      return confirm("Are you planning a big purchase?");
+    }
+  }, (results) => {
+    if (!results || !results[0]) return;
+
+    const userClickedYes = results[0].result;
+    if (userClickedYes) {
+      chrome.tabs.update(tabId, { url: LOAN_URL });
+    }
+  });
+}

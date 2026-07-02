@@ -1,19 +1,21 @@
 {
   "manifest_version": 3,
-  "name": "Purchase Policy Optimizer",
-  "version": "1.0.0",
-  "description": "Tracks domain counters and optimizes purchase policies on 2nd-3rd visits.",
+  "name": "AuraAI Intent Tracker",
+  "version": "1.0",
+  "description": "Monitors high-value target assets and seamlessly links to financing solutions.",
   "permissions": [
+    "storage",
     "tabs",
-    "storage"
+    "scripting"
+  ],
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
   ],
   "background": {
     "service_worker": "background.js"
   },
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["content.js"]
-    }
-  ]
+  "action": {
+    "default_popup": "popup.html"
+  }
 }

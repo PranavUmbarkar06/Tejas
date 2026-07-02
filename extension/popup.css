@@ -1,0 +1,254 @@
+/* --- Design Tokens & CSS Variables --- */
+:root {
+  --bg-primary: #081C2D;       /* Midnight Blue */
+  --bg-secondary: #112D4E;     /* Cards & Sub-containers */
+  --accent-primary: #2563EB;   /* Royal Blue */
+  --accent-ai: #10B981;        /* Emerald Green */
+  --color-success: #22C55E;
+  --color-warning: #F59E0B;
+  --color-error: #EF4444;
+  --text-primary: #F8FAFC;
+  --text-secondary: #CBD5E1;
+  --border-color: #1E3A5F;
+  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* --- Layout Base --- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  width: 360px;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-family);
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 16px;
+  overflow-x: hidden;
+}
+
+/* --- Header System --- */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 16px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brand h1 {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.ai-orb {
+  width: 10px;
+  height: 10px;
+  background-color: var(--accent-ai);
+  border-radius: 50%;
+  box-shadow: 0 0 12px var(--accent-ai);
+  position: relative;
+}
+
+.security-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background-color: rgba(34, 197, 94, 0.08);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+  padding: 4px 8px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--color-success);
+}
+
+.security-badge svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* --- Premium Component Cards --- */
+.card {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.24);
+  margin-bottom: 16px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.header-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.card-header h2 {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+}
+
+.card-desc {
+  color: var(--text-secondary);
+  font-size: 12px;
+  margin-bottom: 14px;
+}
+
+/* --- Asset Tracking UI Elements --- */
+.asset-tracker-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.asset-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgba(8, 28, 45, 0.5);
+  border: 1px solid var(--border-color);
+  padding: 10px 12px;
+  border-radius: 12px;
+  transition: border-color 0.2s ease;
+}
+
+.asset-item:hover {
+  border-color: var(--accent-primary);
+}
+
+.asset-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.asset-info svg {
+  width: 16px;
+  height: 16px;
+}
+
+.asset-name {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.asset-meta {
+  font-size: 10px;
+  color: var(--text-secondary);
+}
+
+/* --- UI Badges & Interactive States --- */
+.badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 12px;
+  text-transform: uppercase;
+}
+
+.badge-active {
+  background-color: rgba(16, 185, 129, 0.12);
+  color: var(--accent-ai);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.counter-badge {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent-ai);
+}
+
+/* --- Premium Buttons & Interaction Grid --- */
+.quick-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-family);
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 12px;
+  padding: 12px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+}
+
+.btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.btn-primary {
+  background-color: var(--accent-primary);
+  color: var(--text-primary);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+}
+
+.btn-primary:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background-color: var(--bg-secondary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+  background-color: #183d66;
+  color: var(--text-primary);
+}
+
+.action-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+/* --- Utility Classes & Footer --- */
+.text-accent-ai { color: var(--accent-ai); }
+.icon-ai { color: var(--accent-ai); }
+.icon-secondary { color: var(--text-secondary); }
+.icon-success { color: var(--color-success); }
+
+.app-footer {
+  text-align: center;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-color);
+}
+
+.app-footer p {
+  font-size: 10px;
+  color: var(--text-secondary);
+  letter-spacing: 0.3px;
+}

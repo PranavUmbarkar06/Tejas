@@ -3,7 +3,8 @@ import uuid
 from datetime import datetime
 from typing import Any, Dict, Optional
 from details import UnifiedOcrPipeline
-
+from typing import Dict, Any
+    
 
 pipeline=UnifiedOcrPipeline()
 
@@ -83,21 +84,34 @@ class OnboardingSession:
         
         
 
+    
+
     def to_json(self) -> str:
-        """Compiles the finalized onboarding data into the target JSON structure."""
+        """
+        Compiles the finalized onboarding data into the target schema structure.
+        Initializes empty financial and history placeholders to be populated downstream.
+        """
         if self.current_state != "COMPLETED":
             raise ValueError("Cannot generate JSON: Onboarding is incomplete.")
+
+        # Strictly mask highly sensitive identification numbers for data privacy
+        masked_aadhar = f"XXXX-XXXX-{str(self.aadhar_card_number)[-4:]}" if self.aadhar_card_number else None
 
         data: Dict[str, Any] = {
             "uid": self.uid,
             "name": self.name,
             "dob": self.dob,
-            "aadhar_card_number": self.aadhar_card_number,
+            "aadhar_card_number": masked_aadhar,
             "pan_card_number": self.pan_card_number,
-            "websites":{}
+            "websites": {},
+            "financial_profile": {
+                "current_savings_balance": 0,       # Populated downstream by core banking sync
+                "estimated_monthly_net_income": 0,  # Populated downstream by income engine
+                "current_cibil_score": 0            # Populated downstream by bureau pull
+            },
+            "purchasing_history": []                # Populated downstream by 5-year ledger fetch[cite: 1]
         }
         return json.dumps(data, indent=4)
-
 
     # --- Simulating workflow execution ---
 if __name__ == "__main__":

@@ -130,7 +130,7 @@ if __name__ == "__main__":
     pipeline = UnifiedOcrPipeline()
 
     try:
-        result = pipeline.process_document("data/pan_card.jpeg")
+        result = pipeline.process_document("data/fake aadhar.pdf")
         
         print(f"Card Detected: {result['document_type']}")
         print(f"PAN Number:    {result.get('pan_number')}")
