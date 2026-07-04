@@ -278,7 +278,7 @@ if __name__ == "__main__":
 
     for sample_input in [
         
-        "I want to buy a luxury car worth 80 lakhs, am I eligible?"
+        "i want to buy a new car worth 20 lakh. can i secure a loan for it?"
     ]:
         print(f"\n>>> USER: {sample_input}")
         result = handle_user_request(sample_input, uid=test_uid)

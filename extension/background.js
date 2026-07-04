@@ -1,6 +1,6 @@
 const TARGET_DOMAINS = ["tesla.com", "autotrader.com", "godaddy.com", "carvana.com"];
 const VISIT_THRESHOLD = 2; // Prompt triggers when visits > 2 (i.e., on the 3rd visit)
-const LOAN_URL = "https://somebank.com/loans_agent";
+const LOAN_URL = "http://localhost:5173/";
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   // Catching 'complete' status ensures we only count full page loads, not background resource adjustments
