@@ -79,6 +79,8 @@ def run_purchase_advisor_pipeline(user_profile_json: str, target_product: str, p
     - You must cross-reference the applicant's CIBIL score, calculated FOIR/DTI ratio, and emergency buffer threshold directly against the numeric boundaries defined inside the provided [BANK POLICY CONTEXT].
     - Do not make assumptions, invent tolerances, or soften credit policies. If a rule condition is broken, you must execute a definitive rejection and output the alphanumeric error code corresponding to that specific policy failure (found in Section 4).
     - If the application complies with all guidelines, outline a conversational, precise hybrid-financing strategy or upfront deployment recommendation based strictly on the parameters authorized in the policy document.
+
+    
     """
 
     user_prompt = f"""
