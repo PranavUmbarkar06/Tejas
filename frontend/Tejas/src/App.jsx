@@ -254,8 +254,19 @@ function Brand({ compact = false }) {
   return <div className="brand"><div className="brand-mark"><span>T</span></div>{!compact && <div><b>TEJAS</b><small>FINANCE</small></div>}</div>
 }
 
-function Login({ onDemo, onContinue }) {
+function Login({ onDemo, onContinue, onLogin }) {
   const [mode, setMode] = useState('login')
+  const [email, setEmail] = useState('')
+  const [name, setName] = useState('')
+
+  const handleAccess = () => {
+    if (mode === 'signup') {
+      onContinue()
+    } else {
+      onLogin(email || 'U001')
+    }
+  }
+
   return <main className="auth-shell">
     <section className="auth-visual">
       <div className="top-brand"><Brand /></div>
@@ -268,14 +279,14 @@ function Login({ onDemo, onContinue }) {
       <div className="auth-form">
         <div className="auth-kicker">SECURE CLIENT ACCESS</div>
         <h2>{mode === 'login' ? 'Welcome back.' : 'Begin your journey.'}</h2>
-        <p>{mode === 'login' ? 'Enter your credentials to access your private banking workspace.' : 'Create a secure account for your Tejas experience.'}</p>
+        <p>{mode === 'login' ? 'Enter your credentials or User ID (e.g. U001) to access your workspace.' : 'Create a secure account for your Tejas experience.'}</p>
         <div className="mode-tabs"><button className={mode==='login'?'active':''} onClick={()=>setMode('login')}>Sign in</button><button className={mode==='signup'?'active':''} onClick={()=>setMode('signup')}>Create account</button></div>
-        {mode==='signup' && <label>Full legal name<div className="field"><UserRound/><input placeholder="As per government ID"/></div></label>}
-        <label>Email address<div className="field"><MessageSquareText/><input type="email" placeholder="name@company.com"/></div></label>
-        <label>Password <a>Forgot password?</a><div className="field"><LockKeyhole/><input type="password" placeholder="Enter your password"/></div></label>
-        <button className="primary-btn" onClick={onContinue}>{mode==='login'?'Access workspace':'Create secure account'} <ArrowRight/></button>
+        {mode==='signup' && <label>Full legal name<div className="field"><UserRound/><input placeholder="As per government ID" value={name} onChange={e=>setName(e.target.value)}/></div></label>}
+        <label>{mode==='login' ? 'Email address or User ID (U001 - U010)' : 'Email address'}<div className="field"><MessageSquareText/><input placeholder={mode==='login' ? 'e.g. U001 or email@domain.com' : 'name@company.com'} value={email} onChange={e=>setEmail(e.target.value)} onKeyDown={e=>e.key==='Enter'&&handleAccess()}/></div></label>
+        <label>Password <a>Forgot password?</a><div className="field"><LockKeyhole/><input type="password" placeholder="Enter your password" onKeyDown={e=>e.key==='Enter'&&handleAccess()}/></div></label>
+        <button className="primary-btn" onClick={handleAccess}>{mode==='login'?'Access workspace':'Create secure account'} <ArrowRight/></button>
         <div className="or"><span/>OR EXPLORE INSTANTLY<span/></div>
-        <button className="demo-btn" onClick={onDemo}><Sparkles/><span><b>Enter demo workspace</b><small>Pre-filled with a secure sample profile</small></span><ChevronRight/></button>
+        <button className="demo-btn" onClick={onDemo}><Sparkles/><span><b>Enter demo workspace</b><small>Pre-filled with a secure sample profile (Ananya Rao)</small></span><ChevronRight/></button>
         <div className="privacy"><ShieldCheck/> Your information is encrypted and never shared.</div>
       </div>
     </section>
@@ -285,24 +296,250 @@ function Login({ onDemo, onContinue }) {
 function VectorCanvas() {
   return <div className="vector-canvas">
     <svg viewBox="0 0 700 760" aria-hidden="true">
-      <defs><radialGradient id="glow"><stop stopColor="#d9795f" stopOpacity=".35"/><stop offset="1" stopColor="#241d1a" stopOpacity="0"/></radialGradient><marker id="arrow" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#e39177"/></marker></defs>
+      <defs><radialGradient id="glow"><stop stopColor="#F6C945" stopOpacity=".35"/><stop offset="1" stopColor="#0a0a0a" stopOpacity="0"/></radialGradient><marker id="arrow" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#F6C945"/></marker></defs>
       <circle cx="350" cy="380" r="300" fill="url(#glow)"/><g className="grid-lines">{[170,230,290,350,410,470,530].map(x=><line key={x} x1={x} y1="90" x2={x} y2="670"/>)}{[200,260,320,380,440,500,560].map(y=><line key={y} x1="70" y1={y} x2="630" y2={y}/>)}</g>
       <g className="rings"><ellipse cx="350" cy="380" rx="232" ry="88"/><ellipse cx="350" cy="380" rx="88" ry="232" transform="rotate(38 350 380)"/><ellipse cx="350" cy="380" rx="88" ry="232" transform="rotate(-38 350 380)"/></g>
       <g className="axes"><line x1="115" y1="525" x2="585" y2="235" markerEnd="url(#arrow)"/><line x1="165" y1="255" x2="540" y2="545" markerEnd="url(#arrow)"/><line x1="350" y1="620" x2="350" y2="135" markerEnd="url(#arrow)"/></g><circle className="core" cx="350" cy="380" r="13"/><circle className="pulse" cx="350" cy="380" r="26"/>
     </svg>
-    <div className="vector-caption"><span>IDENTITY VECTOR</span><b>Establishing your<br/>financial coordinates.</b><p>Every verified detail sharpens the intelligence behind your Tejas profile.</p></div>
+    
   </div>
 }
 
 function Onboarding({ onComplete }) {
-  const [file, setFile] = useState(null), [loading,setLoading]=useState(false), [data,setData]=useState(null)
-  const input = useRef()
-  async function upload(selected){ if(!selected)return; setFile(selected); setLoading(true); const form=new FormData(); form.append('file',selected); try { const res=await fetch(`${API_BASE}/api/onboarding/upload`,{method:'POST',body:form}); if(!res.ok) throw Error(); setData(await res.json()) } catch { setTimeout(()=>setData({full_name:'Arjun Mehta',document_type:selected.name.toLowerCase().includes('pan')?'PAN':'Aadhaar',masked_identifier:'•••• •••• 4821',date_of_birth:'14 Aug 1994',confidence:98.6}),450) } finally {setTimeout(()=>setLoading(false),450)} }
-  return <main className="onboarding">
+  const [messages, setMessages] = useState([])
+  const [uid, setUid] = useState(null)
+  const [state, setState] = useState('START')
+  const [text, setText] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [uploading, setUploading] = useState(false)
+  const [formData, setFormData] = useState({
+    name: '',
+    dob: '',
+    pan: '',
+    aadhaar: ''
+  })
+  
+  const messagesEndRef = useRef(null)
+  const fileInputRef = useRef(null)
+
+  // Start the state machine session on load
+  useEffect(() => {
+    async function start() {
+      setLoading(true)
+      try {
+        const res = await fetch(`${API_BASE}/api/onboarding/start`, { method: 'POST' })
+        if (res.ok) {
+          const data = await res.json()
+          setUid(data.uid)
+          setState(data.state)
+          setMessages([{ ai: true, text: data.prompt }])
+        }
+      } catch (err) {
+        console.error("Failed starting onboarding", err)
+      } finally {
+        setLoading(false)
+      }
+    }
+    start()
+  }, [])
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages, loading, uploading])
+
+  const handleSend = async () => {
+    if (!text.trim() || loading) return
+    const userMsg = text.trim()
+    setMessages(prev => [...prev, { ai: false, text: userMsg }])
+    setText('')
+    setLoading(true)
+
+    try {
+      const res = await fetch(`${API_BASE}/api/onboarding/message`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ uid, message: userMsg })
+      })
+      if (res.ok) {
+        const data = await res.json()
+        if (data.status === 'validation_error') {
+          setMessages(prev => [...prev, { ai: true, text: `⚠️ ${data.error}` }])
+        } else {
+          setState(data.state)
+          setMessages(prev => [...prev, { ai: true, text: data.prompt }])
+          if (data.name) setFormData(f => ({ ...f, name: data.name }))
+          if (data.dob) setFormData(f => ({ ...f, dob: data.dob }))
+        }
+      }
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleUpload = async (file) => {
+    if (!file || uploading) return
+    setUploading(true)
+    const payload = new FormData()
+    payload.append('uid', uid)
+    payload.append('file', file)
+
+    try {
+      const res = await fetch(`${API_BASE}/api/onboarding/upload`, {
+        method: 'POST',
+        body: payload
+      })
+      if (res.ok) {
+        const data = await res.json()
+        setState(data.state)
+        const ext = data.extracted_data
+        
+        if (ext.document_type === 'PAN') {
+          setFormData(f => ({ ...f, pan: ext.pan_number }))
+        } else if (ext.document_type === 'AADHAAR') {
+          setFormData(f => ({ ...f, aadhaar: ext.aadhaar_number }))
+        }
+
+        setMessages(prev => [
+          ...prev,
+          { ai: false, text: `Uploaded ${file.name} successfully.` },
+          { ai: true, text: data.prompt }
+        ])
+      }
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setUploading(false)
+    }
+  }
+
+  const handleConfirm = async () => {
+    setLoading(true)
+    try {
+      const res = await fetch(`${API_BASE}/api/onboarding/complete`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ uid })
+      })
+      if (res.ok) {
+        const data = await res.json()
+        onComplete(data.user)
+      }
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return <main className="onboarding onboard-chat-screen">
     <header><Brand/><div className="secure-label"><ShieldCheck/> SECURE ONBOARDING</div><div className="step-label">STEP 01 OF 02</div></header>
-    <div className="onboard-grid"><section className="identity-panel"><VectorCanvas/></section><section className="upload-panel"><div className="upload-content"><div className="eyebrow blue"><span/> IDENTITY VERIFICATION</div><h2>Let’s verify<br/>who you are.</h2><p className="lead">Upload one government-issued identity document. We extract only what is needed and redact sensitive identifiers automatically.</p>
-      {!data ? <><div className={`dropzone ${loading?'loading':''}`} onClick={()=>input.current.click()} onDragOver={e=>e.preventDefault()} onDrop={e=>{e.preventDefault();upload(e.dataTransfer.files[0])}}><input ref={input} type="file" accept=".pdf,.jpg,.jpeg,.png" hidden onChange={e=>upload(e.target.files[0])}/>{loading?<><div className="scanner"/><Fingerprint className="drop-icon"/><h3>Reading secure document…</h3><p>{file?.name}</p></>:<><UploadCloud className="drop-icon"/><h3>Drop your document here</h3><p>or <u>browse from your device</u></p><small>PDF, JPG or PNG · Maximum 10 MB</small></>}</div><div className="doc-options"><span><FileCheck2/> PAN card</span><span><Fingerprint/> Aadhaar card</span></div></> : <div className="extracted-card"><div className="extract-head"><span><BadgeCheck/> Document verified</span><b>{data.confidence}% confidence</b></div><label>Full legal name<input value={data.full_name} onChange={e=>setData({...data,full_name:e.target.value})}/></label><div className="two-fields"><label>Document type<input value={data.document_type} readOnly/></label><label>Identifier<input value={data.masked_identifier} readOnly/></label></div><label>Date of birth<input value={data.date_of_birth} onChange={e=>setData({...data,date_of_birth:e.target.value})}/></label><p className="redaction"><ShieldCheck/> Sensitive digits are redacted before they leave the verification layer.</p></div>}
-      <button className="primary-btn" disabled={!data} onClick={onComplete}>Confirm & enter Tejas <ArrowRight/></button><p className="microcopy">By continuing, you consent to secure identity verification for this demo.</p></div></section></div>
+    <div className="onboard-grid">
+      <section className="identity-panel"><VectorCanvas/></section>
+      
+      <section className="chat-and-form-panel">
+        <div className="chat-panel-container">
+          <div className="chat-messages-wrap">
+            {messages.map((m, idx) => (
+              <div className={`message-row ${m.ai ? 'ai-row' : 'user-row'}`} key={idx}>
+                <div className={`message ${m.ai ? 'ai' : 'user'}`}>
+                  {m.ai && <div className="ai-mark"><Sparkles /></div>}
+                  <div className="message-body">{m.text}</div>
+                </div>
+              </div>
+            ))}
+            {(loading || uploading) && (
+              <div className="message-row ai-row">
+                <div className="message ai typing">
+                  <div className="ai-mark"><Sparkles/></div>
+                  <div className="message-body">
+                    {uploading ? (
+                      <div className="ocr-scanner-box">
+                        <span className="scanner-line"/>
+                        <span>Scanning document with OCR pipeline...</span>
+                      </div>
+                    ) : (
+                      <span className="typing-dots"><i/><i/><i/></span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+            <div ref={messagesEndRef} />
+          </div>
+
+          <div className="chat-input-area">
+            {(state === 'AWAITING_NAME' || state === 'AWAITING_DOB') && (
+              <div className="composer">
+                <textarea
+                  value={text}
+                  onChange={e => setText(e.target.value)}
+                  onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
+                  placeholder={state === 'AWAITING_NAME' ? "Enter your name..." : "Enter your DOB (DD/MM/YYYY)..."}
+                  disabled={loading}
+                />
+                <button className="send" onClick={handleSend} disabled={loading || !text.trim()}><Send/></button>
+              </div>
+            )}
+
+            {(state === 'AWAITING_PAN' || state === 'AWAITING_AADHAAR') && (
+              <div className="dropzone dropzone-compact" onClick={() => fileInputRef.current?.click()}>
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={e => handleUpload(e.target.files[0])}
+                  accept=".jpg,.jpeg,.png,.pdf"
+                  hidden
+                />
+                <UploadCloud className="drop-icon"/>
+                <h3>Upload your {state === 'AWAITING_PAN' ? 'PAN Card' : 'Aadhaar Card'}</h3>
+                <p>Click or drag image/PDF to scan details</p>
+              </div>
+            )}
+
+            {state === 'COMPLETED' && (
+              <button className="primary-btn complete-button" onClick={handleConfirm} disabled={loading}>
+                Confirm & enter Tejas <ArrowRight/>
+              </button>
+            )}
+          </div>
+        </div>
+
+        <div className="form-summary-card">
+          <div className="extract-head">
+            <span><BadgeCheck/> Profile Data</span>
+            <b>Interactive verification</b>
+          </div>
+          
+          <label>Full legal name
+            <input
+              value={formData.name}
+              onChange={e => setFormData({ ...formData, name: e.target.value })}
+              placeholder="Awaiting name input..."
+            />
+          </label>
+          
+          <label>Date of birth
+            <input
+              value={formData.dob}
+              onChange={e => setFormData({ ...formData, dob: e.target.value })}
+              placeholder="Awaiting DOB input..."
+            />
+          </label>
+          
+          <div className="two-fields">
+            <label>PAN Card
+              <input value={formData.pan} readOnly placeholder="Awaiting upload..." />
+            </label>
+            <label>Aadhaar Card
+              <input value={formData.aadhaar} readOnly placeholder="Awaiting upload..." />
+            </label>
+          </div>
+          <p className="redaction"><ShieldCheck/> All private keys and identities remain fully local and secure.</p>
+        </div>
+      </section>
+    </div>
   </main>
 }
 
@@ -320,6 +557,7 @@ function CommandCenter({ user, onLogout }) {
   const [scenario, setScenario] = useState(null)
   const [text, setText] = useState('')
   const [sending, setSending] = useState(false)
+  const [profileCollapsed, setProfileCollapsed] = useState(false)
 
   const [messages, setMessages] = useState([
     { ai: true, text: `Good morning, ${firstName}. I’ve reviewed your ₹${money(profile.current_savings_balance)} liquidity position, ${profile.current_cibil_score} CIBIL score, and credit history.` },
@@ -382,6 +620,8 @@ function CommandCenter({ user, onLogout }) {
   }
 
   // --- CONNECTED TO FLASK BACKEND CORRESPONDING TO `handle_user_request` ---
+  const [loadingStatus, setLoadingStatus] = useState("Consulting policy intelligence...")
+
   async function send() {
     if (!text.trim() || sending) return
     const prompt = text
@@ -390,6 +630,21 @@ function CommandCenter({ user, onLogout }) {
     setMessages(m => [...m, { text: prompt }])
     setText('')
     setSending(true)
+
+    const statuses = [
+      "Consulting policy intelligence...",
+      "Analyzing credit coordinates...",
+      "Cross-referencing regulatory guidelines...",
+      "Calculating debt-to-income models...",
+      "Securing compliance validation..."
+    ]
+    let statusIdx = 0
+    setLoadingStatus(statuses[0])
+
+    const interval = setInterval(() => {
+      statusIdx = (statusIdx + 1) % statuses.length
+      setLoadingStatus(statuses[statusIdx])
+    }, 1500)
 
     try {
       const res = await fetch(`${API_BASE}/api/request`, {
@@ -410,12 +665,13 @@ function CommandCenter({ user, onLogout }) {
     } catch {
       setMessages(m => [...m, { ai: true, text: 'Server error or servers are down' }])
     } finally {
+      clearInterval(interval)
       setSending(false)
     }
   }
 
-  return <main className="dashboard"><aside className="sidebar"><Brand compact/><nav><button className="active"><Sparkles/></button><button><WalletCards/></button><button><TrendingUp/></button><button><UserRound/></button></nav><button onClick={onLogout}><Menu/></button></aside>
-    <section className="workspace"><header className="dash-header"><div><span>TEJAS /</span> COMMAND CENTER</div><div className="header-actions"><span className="live"><i/> API CONNECTED</span><button><Bell/></button><div className="avatar">{initials}</div></div></header>
+  return <main className={`dashboard fade-in-screen ${profileCollapsed ? 'profile-collapsed' : ''}`}><aside className="sidebar"><Brand compact/><nav><button className="active"><Sparkles/></button><button><WalletCards/></button><button><TrendingUp/></button><button><UserRound/></button></nav><button onClick={onLogout}><Menu/></button></aside>
+    <section className="workspace"><header className="dash-header"><div><span>TEJAS /</span> COMMAND CENTER</div><div className="header-actions"><span className="live"><i/> API CONNECTED</span><button className="toggle-profile-btn" onClick={() => setProfileCollapsed(!profileCollapsed)}><UserRound size={16} /> <span>{profileCollapsed ? 'Open Profile' : 'Close Profile'}</span></button><button><Bell/></button><div className="avatar">{initials}</div></div></header>
       <div className="command-grid"><section className="chat-column"><div className="chat-title"><div><div className="eyebrow blue"><span/> PRIVATE CREDIT INTELLIGENCE</div><h1>Good morning, <em>{firstName}.</em></h1><p>Let’s engineer your next move.</p></div><div className="session"><ShieldCheck/> {user.uid} · CIBIL {profile.current_cibil_score}</div></div>
 
         {/* Render chat message feed with selective streaming */}
@@ -432,14 +688,19 @@ function CommandCenter({ user, onLogout }) {
             <div className="message-row">
               <div className="message ai typing">
                 <div className="ai-mark"><Sparkles/></div>
-                <div className="message-body"><span className="typing-dots"><i/><i/><i/></span></div>
+                <div className="message-body">
+                  <div className="ocr-scanner-box">
+                    <span className="scanner-line"/>
+                    <span style={{ fontSize: '11px', color: 'var(--muted)', fontWeight: 500 }}>{loadingStatus}</span>
+                  </div>
+                </div>
               </div>
             </div>
           )}
         </div>
 
         <div className="quick-prompts"><button onClick={()=>setText('I’m considering a new car around ₹12 lakh.')}><CircleDollarSign/> Finance a vehicle</button><button onClick={()=>setText('What are the current personal loan policies?')}><FileCheck2/> Ask about policy</button></div>
-        <div className="composer"><button><Paperclip/></button><textarea value={text} onChange={e=>setText(e.target.value)} onKeyDown={e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}}} placeholder="Ask Tejas about a loan, policy, or purchase…"/><button className="send" disabled={sending} onClick={send}><Send/></button></div><small className="composer-note">{sending?'Consulting policy intelligence…':'Tejas may make mistakes. Financial decisions remain yours.'}</small>
+        <div className="composer"><button><Paperclip/></button><textarea value={text} onChange={e=>setText(e.target.value)} onKeyDown={e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}}} placeholder="Ask Tejas about a loan, policy, or purchase…"/><button className="send" disabled={sending} onClick={send}><Send/></button></div><small className="composer-note">{sending ? loadingStatus : 'Tejas may make mistakes. Financial decisions remain yours.'}</small>
       </section><aside className="finance-column"><div className="panel-head"><span>FINANCIAL PULSE</span><button>LIVE</button></div>
         <div className="liquidity card"><div className="card-label"><WalletCards/> ACCOUNT LIQUIDITY</div><p>Available savings balance</p><h2>₹{money(profile.current_savings_balance)}<span>.00</span></h2><div className="portfolio"><span>Active monthly obligations</span><b>₹{money(user.purchasing_history.filter(x=>x.status==='active').reduce((sum,x)=>sum+x.monthly_emi,0))}</b></div></div>
         <div className="scenario card"><div className="card-label"><TrendingUp/> WHAT-IF SCENARIO</div><label>Target loan amount <b>₹{(amount/100000).toFixed(1)}L</b></label><input type="range" min="200000" max="5000000" step="50000" value={amount} onChange={e=>{const v=+e.target.value;setAmount(v);refreshScenario(v,income)}}/><div className="range-labels"><span>₹2L</span><span>₹50L</span></div><label>Monthly income <b>₹{(income/100000).toFixed(2)}L</b></label><input type="range" min="20000" max="500000" step="5000" value={income} onChange={e=>{const v=+e.target.value;setIncome(v);refreshScenario(amount,v)}}/><div className="eligibility"><div className="meter" style={{'--score':`${score*3.6}deg`}}><div><b>{score}</b><small>/ 100</small></div></div><div><span>ELIGIBILITY SIGNAL</span><b>{scenario?.signal ?? (score>=78?'Strong fit':score>=60?'Moderate fit':'Needs review')}</b><p>{scenario?`${scenario.foir_percent}% estimated FOIR`:'Move a slider to query Flask'}</p></div></div></div>
@@ -452,7 +713,7 @@ export default function App() {
   const [screen, setScreen] = useState('login')
   const [user, setUser] = useState(null)
 
-  async function enter(uid = 'U009') {
+  async function enter(uid = 'U001') {
     try {
       const res = await fetch(`${API_BASE}/api/user/${uid}`)
       if (!res.ok) throw Error()
@@ -465,11 +726,26 @@ export default function App() {
     }
   }
 
-  return screen === 'login' ? (
-    <Login onDemo={() => enter('U009')} onContinue={() => setScreen('onboarding')} />
-  ) : screen === 'onboarding' ? (
-    <Onboarding onComplete={() => enter('U009')} />
-  ) : user ? (
-    <CommandCenter user={user} onLogout={() => setScreen('login')} />
-  ) : null
+  const handleCompleteOnboarding = (newUserObj) => {
+    setUser(newUserObj)
+    setScreen('dashboard')
+  }
+
+  return (
+    <div className="app-container">
+      {screen === 'login' && (
+        <div className="fade-in-screen">
+          <Login onDemo={() => enter('U001')} onContinue={() => setScreen('onboarding')} onLogin={enter} />
+        </div>
+      )}
+      {screen === 'onboarding' && (
+        <div className="fade-in-screen">
+          <Onboarding onComplete={handleCompleteOnboarding} />
+        </div>
+      )}
+      {screen === 'dashboard' && user && (
+        <CommandCenter user={user} onLogout={() => setScreen('login')} />
+      )}
+    </div>
+  )
 }
