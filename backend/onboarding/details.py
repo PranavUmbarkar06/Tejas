@@ -5,7 +5,7 @@ import numpy as np
 import pytesseract
 from PIL import Image
 from pdf2image import convert_from_path
-
+# test comment 
 # Set explicit Tesseract path if needed
 # pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
